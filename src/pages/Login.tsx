@@ -95,9 +95,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black to-gray-900">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-      <Card className="p-8 w-full max-w-md bg-black/60 border-cyber-pink/50 backdrop-blur-xl">
+      <Card className="p-8 w-full max-w-md bg-white/10 border-cyber-pink/50 backdrop-blur-xl">
         <div className="space-y-6">
           <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-cyber-pink via-cyber-mint to-cyber-yellow bg-clip-text text-transparent">
             Marketing Dashboard
@@ -109,7 +109,7 @@ const Login = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-cyber-pink/50 bg-black/50 text-white placeholder:text-gray-400"
+                className="border-cyber-pink/50 bg-white/20 text-white placeholder:text-gray-400"
                 required
               />
             </div>
@@ -119,7 +119,7 @@ const Login = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border-cyber-pink/50 bg-black/50 text-white placeholder:text-gray-400"
+                className="border-cyber-pink/50 bg-white/20 text-white placeholder:text-gray-400"
                 required
               />
             </div>
