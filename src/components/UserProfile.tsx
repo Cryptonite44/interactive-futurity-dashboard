@@ -10,12 +10,21 @@ export const UserProfile = () => {
 
   const handleLogout = async () => {
     try {
+      // First clear the session from local storage
+      localStorage.removeItem('sb-rruqqrejqarlhjohvomu-auth-token');
+      
+      // Attempt to sign out from Supabase
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase logout error:', error);
+        // Even if Supabase logout fails, we'll still redirect the user
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Always show success message and redirect, even if there were backend errors
       toast.success("Logged out successfully");
       navigate("/login");
-    } catch (error) {
-      toast.error("Error logging out");
     }
   };
 
