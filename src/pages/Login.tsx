@@ -13,6 +13,15 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
     
     const { error } = await supabase.auth.signInWithPassword({
@@ -38,11 +47,35 @@ const Login = () => {
 
   const handleSignUp = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters long",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
     
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          full_name: email.split('@')[0],
+        }
+      }
     });
 
     if (error) {
