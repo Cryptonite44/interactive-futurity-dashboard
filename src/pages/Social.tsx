@@ -1,5 +1,7 @@
 import { Sidebar } from "@/components/Sidebar";
 import { Card } from "@/components/ui/card";
+import { useLinkedInData } from "@/hooks/useLinkedInData";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -10,6 +12,8 @@ import {
 } from "@/components/ui/table";
 
 const Social = () => {
+  const { data: linkedInData, isError, isLoading } = useLinkedInData();
+
   const socialMetrics = [
     {
       platform: "Twitter/X",
@@ -20,10 +24,10 @@ const Social = () => {
     },
     {
       platform: "LinkedIn",
-      followers: "28.6K",
-      engagement: "2.5%",
-      posts: 84,
-      clicks: "1.8K",
+      followers: linkedInData ? `${(linkedInData.followers / 1000).toFixed(1)}K` : "Loading...",
+      engagement: linkedInData?.engagement || "Loading...",
+      posts: linkedInData?.posts || 0,
+      clicks: linkedInData ? `${(linkedInData.clicks / 1000).toFixed(1)}K` : "Loading...",
     },
     {
       platform: "Instagram",
@@ -40,6 +44,10 @@ const Social = () => {
       clicks: "1.5K",
     },
   ];
+
+  if (isError) {
+    toast.error("Failed to fetch LinkedIn data. Please check your API configuration.");
+  }
 
   return (
     <div className="flex min-h-screen bg-[#f8f7f8]">
