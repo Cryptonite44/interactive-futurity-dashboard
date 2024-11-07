@@ -67,31 +67,43 @@ const Login = () => {
     
     setLoading(true);
     
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: window.location.origin,
-        data: {
-          full_name: email.split('@')[0],
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin,
+          data: {
+            full_name: email.split('@')[0],
+          }
         }
-      }
-    });
+      });
 
-    if (error) {
+      if (error) {
+        let errorMessage = error.message;
+        if (error.message.includes('email_address_not_authorized')) {
+          errorMessage = "This email domain is not authorized. Please use an authorized email address or contact support.";
+        }
+        toast({
+          title: "Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: "Check your email to confirm your account!",
+        });
+      }
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
+        description: error?.message || "An unexpected error occurred",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Success",
-        description: "Check your email to confirm your account!",
-      });
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
