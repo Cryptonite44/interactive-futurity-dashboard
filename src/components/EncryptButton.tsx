@@ -7,7 +7,7 @@ const CYCLES_PER_LETTER = 2;
 const SHUFFLE_TIME = 50;
 const CHARS = "!@#$%^&*():{};|,.<>/?";
 
-export const EncryptButton = ({ onClick, loading }: { onClick?: () => void; loading?: boolean }) => {
+export const EncryptButton = ({ onClick, loading }: { onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; loading?: boolean }) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [text, setText] = useState(TARGET_TEXT);
 

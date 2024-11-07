@@ -81,7 +81,7 @@ const Login = () => {
               />
             </div>
             <div className="space-y-4">
-              <EncryptButton onClick={handleLogin} loading={loading} />
+              <EncryptButton onClick={(e) => handleLogin(e as React.FormEvent)} loading={loading} />
               <button
                 type="button"
                 onClick={handleSignUp}
