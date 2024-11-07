@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { EncryptButton } from "@/components/EncryptButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -82,29 +81,15 @@ const Login = () => {
               />
             </div>
             <div className="space-y-4">
-              <Button
-                type="submit"
-                className="w-full bg-cyber-pink hover:bg-cyber-pink/80 text-white"
-                disabled={loading}
-              >
-                {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Login"
-                )}
-              </Button>
-              <Button
+              <EncryptButton onClick={handleLogin} loading={loading} />
+              <button
                 type="button"
                 onClick={handleSignUp}
-                className="w-full bg-cyber-mint hover:bg-cyber-mint/80 text-black"
+                className="w-full bg-cyber-mint hover:bg-cyber-mint/80 text-black px-4 py-2 rounded-lg font-mono uppercase transition-colors"
                 disabled={loading}
               >
-                {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
+                Sign Up
+              </button>
             </div>
           </form>
         </div>
