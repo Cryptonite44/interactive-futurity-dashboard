@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 const Login = () => {
@@ -14,32 +14,24 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
+      toast.error("Please fill in all fields");
       return;
     }
     
     setLoading(true);
     
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      console.error("Login error:", error); // This will help with debugging
+      toast.error(error.message || "Failed to sign in");
+    } else if (data?.user) {
+      toast.success("Logged in successfully!");
     } else {
-      toast({
-        title: "Success",
-        description: "Logged in successfully!",
-      });
+      toast.error("Something went wrong. Please try again.");
     }
     
     setLoading(false);
@@ -48,62 +40,42 @@ const Login = () => {
   const handleSignUp = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (password.length < 6) {
-      toast({
-        title: "Error",
-        description: "Password must be at least 6 characters long",
-        variant: "destructive",
-      });
+      toast.error("Password must be at least 6 characters long");
       return;
     }
     
     setLoading(true);
     
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin,
-          data: {
-            full_name: email.split('@')[0],
-          }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          full_name: email.split('@')[0],
         }
-      });
-
-      if (error) {
-        let errorMessage = error.message;
-        if (error.message.includes('email_address_not_authorized')) {
-          errorMessage = "This email domain is not authorized. Please use an authorized email address or contact support.";
-        }
-        toast({
-          title: "Error",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: "Check your email to confirm your account!",
-        });
       }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error?.message || "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+    });
+
+    if (error) {
+      console.error("Signup error:", error); // This will help with debugging
+      let errorMessage = error.message;
+      if (error.message.includes('email_address_not_authorized')) {
+        errorMessage = "This email domain is not authorized. Please use an authorized email address or contact support.";
+      }
+      toast.error(errorMessage);
+    } else if (data?.user) {
+      toast.success("Check your email to confirm your account!");
+    } else {
+      toast.error("Something went wrong. Please try again.");
     }
+    
+    setLoading(false);
   };
 
   return (
